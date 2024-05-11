@@ -4,11 +4,11 @@ import { Link, useNavigate } from "react-router-dom";
 function FindGame() {
   const [gameCode, setGameCode] = useState("");
   const navigate = useNavigate();
-
+  
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch("http://localhost:4001/api/find-game", {
+      const response = await fetch(`http://localhost:4001/api/find-game`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
@@ -32,23 +32,26 @@ function FindGame() {
   };
 
   return (
-    <div className="container">
-      <h1>Find Game</h1>
-      <form onSubmit={handleSubmit}>
-        <div className="mb-3">
-          <label htmlFor="gameCode" className="form-label">Game Code:</label>
-          <input
-            type="text"
-            className="form-control"
-            id="gameCode"
-            value={gameCode}
-            onChange={(e) => setGameCode(e.target.value)}
-          />
+    <div className="d-flex justify-content-center align-items-center vh-100 text-light"  id="container-auth">
+
+      <div className="form-card border p-4 shadow ">
+        <form onSubmit={handleSubmit}  >
+        <h1 className="text-center">Find Game</h1>
+          <div className="mb-3">
+            <label htmlFor="gameCode" className="form-label">Game Code:</label>
+            <input
+              type="text"
+              className="form-control"
+              id="gameCode"
+              value={gameCode}
+              onChange={(e) => setGameCode(e.target.value)}
+            />
+          </div>
+          <button type="submit" className="btn button-auth w-100 text-light">Play</button>
+        </form>
+        <div className="mt-3">
+          <p>Sign-up untuk membuat soal <Link to="/register">di sini</Link>.</p>
         </div>
-        <button type="submit" className="btn btn-primary">Find Game</button>
-      </form>
-      <div className="mt-3">
-        <p>Sign-up untuk membuat soal <Link to="/register">di sini</Link>.</p>
       </div>
     </div>
   );

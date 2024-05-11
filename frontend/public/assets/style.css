@@ -1,0 +1,207 @@
+body {
+    font-family: 'Roboto', 'Helvetica Neue', Arial, sans-serif;
+    width: 100vw;
+}
+
+/* Spesifik untuk iOS */
+@media (prefers-color-scheme: light), (prefers-color-scheme: dark) {
+    body {
+        font-family: 'Helvetica Neue', Arial, sans-serif;
+    }
+}
+
+/* Spesifik untuk Android */
+@media screen and (orientation: portrait), screen and (orientation: landscape) {
+    body {
+        font-family: 'Roboto', Arial, sans-serif;
+    }
+}
+
+.form-card {
+    width: 350px;          /* Set the width of the form */
+    padding: 20px;         /* Padding inside the form for spacing */
+    border-radius: 8px;    /* Rounded corners for aesthetics */
+    background: rgba(0, 0, 0, 0.5); /* Black with 50% opacity */
+
+}
+
+.button-auth{
+    background-image: linear-gradient(to left, #73bfcc, #50a0ba, #3381a7, #216291, #1e4478, #243a71, #2b2f68, #30245e, #3b2a68, #472f72, #53357b, #5f3b85);
+}
+
+#container-auth {
+    /* Set the background image */
+    background-image: url('/public/assets/quizz-.png'); /* Update the path as necessary */
+
+    /* Make sure the image covers the entire container */
+    background-size: cover;
+
+    /* Center the background image */
+    background-position: center;
+
+    /* Do not repeat the background image */
+    background-repeat: no-repeat;
+
+    /* Set the size of the container to cover the full viewport */
+    height: 100vh; /* 100% of the viewport height */
+    width: 100vw; /* 100% of the viewport width */
+
+    /* Additional styles to ensure the container covers the entire screen */
+    position: ; /* Fixed position can make it cover the full screen regardless of scrolling */
+    top: 0;
+    left: 0;
+    z-index: -1; /* Set z-index to -1 to ensure it stays as a background */
+}
+
+.player-page {
+    background-image: 
+        url("data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 320'%3E%3Cpath fill='%235F3B85' fill-opacity='1' d='M0,160L288,288L576,224L864,288L1152,160L1440,288L1440,320L1152,320L864,320L576,320L288,320L0,320Z'%3E%3C/path%3E%3C/svg%3E");
+        background-repeat: no-repeat, no-repeat;
+        background-position: center top, center bottom;
+        background-size: cover, cover;
+        height: 100vh; /* Tinggi penuh viewport */
+        width: 100%; /* Lebar penuh */
+        background-color: #A78DC1;
+        overflow: auto; /* Added overflow auto for scrolling content */
+        z-index: -1; /* Set z-index to -1 to ensure it stays as a background */
+        background-attachment: fixed;
+
+}
+
+.player-name-card {
+    width: 420px;          /* Set the width of the form */
+    padding: 30px;         /* Padding inside the form for spacing */
+    border-radius: 8px;    /* Rounded corners for aesthetics */
+    background: rgba(0, 0, 0, 0.5); /* Black with 50% opacity */
+}
+
+.card-read-quiz {
+
+    background: rgba(0, 0, 0, 0.5) !important; 
+    backdrop-filter: blur(8px);
+    color: #fff; 
+}
+
+.button-name-player{
+    background-color: #73BFCC !important;
+}
+
+.ingame-player{
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 320'%3E%3Cpath fill='%235F3B85' fill-opacity='1' d='M0,160L288,288L576,224L864,160L1440,288L1440,320L1152,320L864,320L576,320L288,320Z'%3E%3C/path%3E%3C/svg%3E");
+    background-repeat: no-repeat, no-repeat;
+    background-position: center top, center bottom;
+    background-size: cover, cover;
+    height: 100vh; /* Tinggi penuh viewport */
+    width: 100%; /* Lebar penuh */
+    background-color: #A78DC1;
+    overflow: auto; /* Added overflow auto for scrolling content */
+    z-index: -1; /* Set z-index to -1 to ensure it stays as a background */
+    background-attachment: fixed;
+}
+
+.quiz-bg{
+    /* Set the background image */
+    background-image: url('/public/assets/bg-quiz-list.png'); /* Update the path as necessary */
+
+    /* Make sure the image covers the entire container */
+    background-size: cover;
+
+    /* Center the background image */
+    background-position: center;
+
+    /* Do not repeat the background image */
+    background-repeat: no-repeat;
+
+    /* Set the size of the container to cover the full viewport */
+    height: 100vh; /* 100% of the viewport height */
+    width: 100vw; /* 100% of the viewport width */
+
+    /* Additional styles to ensure the container covers the entire screen */
+    position: fixed; /* Fixed position can make it cover the full screen regardless of scrolling */
+    top: 0;
+    left: 0;
+    z-index: -1; /* Set z-index to -1 to ensure it stays as a background */
+}
+
+#game-select{
+   
+    background: rgba(0, 0, 0, 0.5) !important; 
+    backdrop-filter: blur(8px);
+    color: #fff; 
+    
+}
+
+.admin-quiz {
+    /* Set the background image */
+    background-image: url('/public/assets/bg-admin-quizzz.png'); /* Update the path as necessary */
+
+    /* Make sure the image covers the entire container */
+    background-size: cover;
+
+    /* Center the background image */
+    background-position: center;
+
+    /* Do not repeat the background image */
+    background-repeat: no-repeat;
+
+    /* Set the size of the container to cover the full viewport */
+    height: 100vh; /* 100% of the viewport height */
+    width: 100vw; /* 100% of the viewport width */
+
+    /* Additional styles to ensure the container covers the entire screen */
+    /* position: relative;  */
+    overflow: auto; /* Added overflow auto for scrolling content */
+    z-index: -1; /* Set z-index to -1 to ensure it stays as a background */
+    background-attachment: fixed;
+}
+
+.title-quiz{
+    padding: 30px;
+    background: rgba(0, 0, 0, 0.5) !important; 
+    backdrop-filter: blur(8px);
+    color: #fff; 
+    margin: '20px 0'
+}
+
+.button-add-quiz{
+    background-image: linear-gradient(to left, #3d6eff, #338afe, #52a1f6, #7cb6ea, #aac7dd);
+    color: #fff;
+}
+
+.option:hover {
+    transform: scale(1.05); /* Mengubah skala elemen menjadi 1.1 kali ukuran normal */
+  }
+
+.card-waiting {
+    
+}
+
+#lobby-host{
+    background-color: #b393f4;
+    color:white;
+}
+
+#button-lobby{
+    background-color: #756398;
+    color:white;
+}
+
+#button-lobby:hover{
+    transform: scale(1.1); 
+    color:white;
+}
+
+.card-lobby{
+    background: rgba(0, 0, 0, 0.5) !important; 
+    backdrop-filter: blur(8px);
+    color: #fff;
+    border-radius: 15px;
+}
+
+#card-play-quiz{
+    background: rgba(0, 0, 0, 0.5) !important; 
+    backdrop-filter: blur(8px);
+    color: #fff;
+    border-radius: 15px;
+}
+

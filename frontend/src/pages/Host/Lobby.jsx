@@ -72,8 +72,8 @@ function LobbyPage() {
   };
 
   return (
-    <div className="container">
-      <div className="card shadow col-md-6 mx-auto mt-5 p-4">
+    <div className="player-page">
+      <div className="card-lobby shadow col-md-6 mx-auto mt-5 p-4">
         <h1 className="text-center mb-4">Lobby</h1>
         <h2 className="text-center mb-4"> {quizTitle}</h2>
         {status === "waiting" ? (
@@ -93,9 +93,9 @@ function LobbyPage() {
             {players.length > 0 ? (
               <>
                 <h2 className="mb-3">Players:</h2>
-                <ul className="list-group">
+                <ul className="list-group l">
                   {players.map(player => (
-                    <li key={player?.id} className="list-group-item">{player?.name}</li>
+                    <li key={player?.id} className="list-group-item" id="lobby-host">{player?.name}</li>
                   ))}
                 </ul>
               </>
@@ -109,7 +109,7 @@ function LobbyPage() {
 
         {/* Tambahkan teks dan tombol untuk menunggu pemain */}
         {status === "waiting" && (
-          <button onClick={startGame} className="btn btn-primary d-block mx-auto mt-3">Start</button>
+          <button onClick={startGame} className="btn w-25 d-block mx-auto mt-3 shadow" id="button-lobby">Start</button>
         )}
       </div>
     </div>

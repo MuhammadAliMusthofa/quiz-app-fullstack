@@ -50,10 +50,15 @@ function JoinGame() {
   };
 
   return (
-    <div className="container">
-      <h1>Join Game</h1>
-      <h2>{quizName}</h2> {/* Tampilkan nama kuis */}
-      <form onSubmit={handleSubmit}>
+    <div className="player-page d-flex justify-content-center align-items-center text-light">
+
+      <div className="">
+        <div>
+
+        <h1 className=" text-center">Join Quiz Game : {quizName}</h1>
+        </div>
+
+      <form onSubmit={handleSubmit} className="player-name-card ">
         <div className="mb-3">
           <label htmlFor="playerName" className="form-label">Player Name:</label>
           <input
@@ -62,10 +67,12 @@ function JoinGame() {
             id="playerName"
             value={playerName}
             onChange={(e) => setPlayerName(e.target.value)}
+            required
           />
         </div>
-        <button type="submit" className="btn btn-primary">Join Game</button>
+        <button type="submit" className="btn w-100 button-name-player">Join Game</button>
       </form>
+      </div>
     </div>
   );
 }

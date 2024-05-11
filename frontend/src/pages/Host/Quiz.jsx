@@ -80,32 +80,44 @@ function QuizListPage() {
     }
   };
 
+  const handleLogout = async () => {
+           
+      sessionStorage.removeItem('userId');  // Assuming the userId is stored with this key
+      // Navigate to the home page
+      navigate('/');
+        
+  };
+
   return (
-    <div className="container">
-      <h1 className="my-4">Quiz List</h1>
-      <div className="row mb-3">
-        <div className="col-md-6">
-          <select className="form-select" onChange={handleSelectChange} value={selectedQuiz}>
-            <option value="">Select Quiz</option>
-            {quizzes.map((quiz) => (
-              <option key={quiz.id} value={quiz.id}>{quiz.title}</option>
-            ))}
-          </select>
+    <div className="quiz-bg">
+      <div style={{float:'right'}}> <button className="btn btn-danger mt-5 me-5" onClick={handleLogout}>Logout</button></div>
+      <h1 className="my-4 ms-5">Quiz List</h1>
+      <div className="col-md-2">
+          <button className="btn btn-success ms-5" onClick={() => setModalVisible(true)}>Create Quiz</button>
         </div>
-        <div className="col-md-2 d-flex align-items-end">
-          <button className="btn btn-primary ms-auto" onClick={handleStartGame}>Start Game</button>
-        </div>
-        <div className="col-md-2 d-flex align-items-end">
-          <button className="btn btn-success ms-auto" onClick={() => setModalVisible(true)}>Create Quiz</button>
-        </div>
-      </div>
-      <ul className="list-group mt-3">
+      <ul className="list-group mt-3 w-50 ms-5">
         {quizzes.map((quiz) => (
           <li key={quiz.id} className="list-group-item ">
             <Link className="text-decoration-none" to={`/quiz/detail/${quiz?.id}`}>{quiz?.title}</Link>
           </li>
         ))}
       </ul>
+
+      <div className="row mt-3 m-5 pt-5 pb-5 ps-2 w-50 rounded " id="game-select">
+        <div className="col-md-8 ">
+          <h5 className=" text-light mb-3 ">Mainkan Game Quiz</h5>
+          <select className="form-select " onChange={handleSelectChange} value={selectedQuiz}>
+            <option value="">Select Quiz Game</option>
+            {quizzes.map((quiz) => (
+              <option key={quiz.id} value={quiz.id}>{quiz.title}</option>
+            ))}
+          </select>
+        <div className="mt-3 ">
+          <button className="btn btn-primary ms-auto" onClick={handleStartGame}>Start Game</button>
+        </div>
+        </div>
+        
+      </div>
 
       {/* Modal untuk create quiz */}
       {modalVisible && (
@@ -130,7 +142,9 @@ function QuizListPage() {
           </div>
         </div>
       )}
+     
     </div>
+    
   );
 }
 

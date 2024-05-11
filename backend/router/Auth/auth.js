@@ -67,7 +67,7 @@ router.post('/register', [
 
                 console.log('User registered successfully');
                 return res.status(200).json({
-                    status: true,
+                    status: 200,
                     message: 'User registered successfully',
                 });
             });
@@ -112,7 +112,7 @@ router.post('/login', [
             if (isMatch) {
                 // Mengembalikan ID pengguna yang berhasil login
                 res.json({ 
-                    status: true,
+                    status: 200,
                     message: `Login successfully`,
                     userId: results[0].id
                 });
@@ -123,4 +123,27 @@ router.post('/login', [
     });
 });
 
+// router.post('/logout', (req, res) => {
+//     req.session.destroy(err => {
+//         if (err) {
+//             console.error('Failed to destroy the session during logout:', err);
+//             return res.status(500).json({
+//                 status: false,
+//                 message: 'Failed to logout due to server error.'
+//             });
+//         }
+
+//         res.status(200).json({
+//             status: true,
+//             message: 'Logged out successfully.'
+//         });
+//     });
+// });
+
+
+
+router.get('/test', (req, res) => {
+    console.log("Halo zain");
+    res.send("Halo zain"); // Mengirimkan respons "Halo zain" ke klien
+});
 module.exports = router;

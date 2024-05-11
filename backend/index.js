@@ -1,7 +1,8 @@
 const express = require('express')
 const app = express()
 const port = 4001
-
+const router = express.Router();
+app.use('/image',express.static(__dirname+'/public/assets/images'));
 //import body parser
 const bodyParser = require('body-parser')
 
@@ -29,6 +30,14 @@ app.use('/api/clone-kahoot', Routers); // use route posts di Express
 const Routerss = require('./router/quiz');
 app.use('/api', Routerss); // use route posts di Express
 
+router.get('/', (req, res) => {
+  console.log(`app running at http://localhost:${port}`);
+  res.send('Hello World!');
+});
+
+
 app.listen(port, () => {
   console.log(`app running at http://localhost:${port}`)
 })
+
+

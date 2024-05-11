@@ -45,9 +45,9 @@ function LoginForm() {
   };
 
   return (
-    <div className="container d-flex justify-content-center align-items-center vh-100">
-      <form onSubmit={(e) => handleSubmit(e)} className="border p-4">
-        <h1 className="mb-4">Register</h1>
+    <div className=" d-flex justify-content-center align-items-center vh-100" id="container-auth">
+      <form onSubmit={(e) => handleSubmit(e)} className=" form-card border p-4 shadow ">
+        <h1 className="mb-4 text-center text-light">Register</h1>
         <div className="mb-3">
           <input
             type="text"
@@ -68,10 +68,10 @@ function LoginForm() {
             required
           />
         </div>
-        <button type="submit" className="btn btn-primary" disabled={delay}>
-          {delay ? "Waiting..." : "Login"}
+        <button type="submit" className="btn button-auth w-100 text-light" disabled={delay} > 
+          {delay ? "Waiting..." : "Register"}
         </button>
-      <div className="mt-3">Sudah Punya Akun ?<Link className="text-decoration-none ms-3" to="/login" >Login</Link></div>
+      <div className="mt-3 text-light">Sudah Punya Akun ?<Link className="text-decoration-none ms-1" to="/login" >Login</Link></div>
       </form>
 
     </div>

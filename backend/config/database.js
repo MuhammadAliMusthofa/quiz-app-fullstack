@@ -4,7 +4,7 @@ let connection = mysql.createConnection({
    host:        'localhost',
    user:        'root',
    password:    '',
-   database:    'bangsat'
+   database:    'kahoot-custom'
  });
 
 connection.connect(function(error){

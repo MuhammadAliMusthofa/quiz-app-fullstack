@@ -8,21 +8,30 @@ import CreateQuiz from "./pages/Host/CreateDetailQuiz";
 import NamaPlayer from "./pages/Player/NamePlayer";
 import InGame from "./pages/Player/InGame";
 import Stat from "./pages/Player/Statistik";
+import Finish from "./pages/Host/Finish";
+import PlayerFinish from "./pages/Player/FinishPlayer";
 import HostGame from "./pages/Host/HostGame";
 import Statistik from "./pages/Player/Statistik";
+import '../public/assets/style.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
+
+
 
 function App() {
-  const location = useLocation();
+  // const location = useLocation();
   // const sharedLayout =
   //   location.pathname === "/" || location.pathname === "/register";
   return (
-    <div className="app">
+  
+    <div className="app" style={{backgroundColor:""}} >
       <main className="content">
         {/* {!sharedLayout && <Navbar />} */}
         {/* Tampilkan Navbar jika hideNavbar bernilai false */}
         <Routes>
           <Route path="/" element={<FindGame />} />
           <Route path="/stat" element={<Statistik />} />
+          <Route path="/host/finish/:gameCode" element={<Finish />} />
+          <Route path="/player/finish/:gameCode" element={<PlayerFinish />} />
           <Route path="/host/ingame/:gameCode" element={<HostGame />} />
           <Route path="/play/ingame/:gameCode" element={<InGame />} />
           <Route path="/join/:game_code" element={<NamaPlayer />} />
@@ -38,6 +47,8 @@ function App() {
         {/* {!sharedLayout && <Footer />} */}
       </main>
     </div>
+    
+
   );
 }
 
