@@ -8,7 +8,7 @@ function Statistik({ gameCode, currentQuestionIndex, questions, setCountdown }) 
     const fetchAnswerSummary = async () => {
       try {
         const response = await fetch(
-          `http://localhost:4001/api/answer-summary/${gameCode}/${questions[currentQuestionIndex]?.question_id}`
+          `http://192.168.40.36:4001/api/answer-summary/${gameCode}/${questions[currentQuestionIndex]?.question_id}`
         );
         if (response.ok) {
           const data = await response.json();

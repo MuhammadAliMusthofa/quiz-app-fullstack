@@ -13,7 +13,7 @@ function QuizListPage() {
   const fetchQuizzes = async () => {
     try {
       const userId = sessionStorage.getItem("userId");
-      const response = await fetch(`http://localhost:4001/api/quiz/${userId}`);
+      const response = await fetch(`http://192.168.40.36:4001/api/quiz/${userId}`);
       if (response.ok) {
         const data = await response.json();
         setQuizzes(data.data);
@@ -35,7 +35,7 @@ function QuizListPage() {
 
   const handleStartGame = async () => {
     const userId = sessionStorage.getItem("userId");
-    const response = await fetch(`http://localhost:4001/api/startgame/${selectedQuiz}`, {
+    const response = await fetch(`http://192.168.40.36:4001/api/startgame/${selectedQuiz}`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
@@ -52,7 +52,7 @@ function QuizListPage() {
 
   const handleSubmitCreateQuiz = async () => {
     const userId = sessionStorage.getItem("userId");
-    const response = await fetch(`http://localhost:4001/api/quiz/add/${userId}`, {
+    const response = await fetch(`http://192.168.40.36:4001/api/quiz/add/${userId}`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json"

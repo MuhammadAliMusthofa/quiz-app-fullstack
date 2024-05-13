@@ -11,7 +11,7 @@ function JoinGame() {
     // Fungsi untuk mengambil nama kuis dari API
     const fetchQuizName = async () => {
       try {
-        const response = await fetch(`http://localhost:4001/api/quiz_name/${game_code}`);
+        const response = await fetch(`http://192.168.40.36:4001/api/quiz_name/${game_code}`);
         if (response.ok) {
           const data = await response.json();
           setQuizName(data.data.quiz_name); // Set nama kuis ke dalam state
@@ -29,7 +29,7 @@ function JoinGame() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch(`http://localhost:4001/api/players/${game_code}`, {
+      const response = await fetch(`http://192.168.40.36:4001/api/players/${game_code}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json"

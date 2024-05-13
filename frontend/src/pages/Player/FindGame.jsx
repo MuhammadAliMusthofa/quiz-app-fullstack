@@ -8,7 +8,7 @@ function FindGame() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch(`http://localhost:4001/api/find-game`, {
+      const response = await fetch(`http://192.168.40.36:4001/api/find-game`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json"

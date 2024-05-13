@@ -16,7 +16,7 @@ function LoginForm() {
 
     try {
       // Mengirim data login ke API
-      const response = await fetch("http://localhost:4001/api/auth/login", {
+      const response = await fetch("http://192.168.40.36:4001/api/auth/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

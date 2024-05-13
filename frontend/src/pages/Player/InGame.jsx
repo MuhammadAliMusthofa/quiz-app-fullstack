@@ -39,7 +39,7 @@ useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await fetch(
-          `http://localhost:4001/api/quiz_list/${gameCode}`
+          `http://192.168.40.36:4001/api/quiz_list/${gameCode}`
         );
         if (response.ok) {
           const data = await response.json();
@@ -124,7 +124,7 @@ const handleAnswerSelection = async (e, answer) => {
         [currentQuestionIndex]: true
       }));
 
-      const response = await fetch(`http://localhost:4001/api/answer`, {
+      const response = await fetch(`http://192.168.40.36:4001/api/answer`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

@@ -13,7 +13,7 @@ const Leaderboard = () => {
   useEffect(() => {
     const fetchPlayerScores = async () => {
       try {
-        const response = await fetch(`http://localhost:4001/api/player-score/${gameCode}`);
+        const response = await fetch(`http://192.168.40.36:4001/api/player-score/${gameCode}`);
         if (!response.ok) {
           throw new Error("Failed to fetch player scores");
         }
@@ -34,7 +34,7 @@ const Leaderboard = () => {
 
   const handleFinishGame = async () => {
     try {
-      const response = await fetch(`http://localhost:4001/api/game/finish/${gameCode}`, {
+      const response = await fetch(`http://192.168.40.36:4001/api/game/finish/${gameCode}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

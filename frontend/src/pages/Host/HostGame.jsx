@@ -19,7 +19,7 @@ const Host = () => {
     const fetchData = async () => {
       try {
         const response = await fetch(
-          `http://localhost:4001/api/quiz_list/${gameCode}`
+          `http://192.168.40.36:4001/api/quiz_list/${gameCode}`
         );
         if (response.ok) {
           const data = await response.json();
@@ -87,7 +87,7 @@ const Host = () => {
       const playerId = sessionStorage.getItem('playerId');
 
       setSelectedAnswer(answer); // Menetapkan jawaban yang dipilih
-      const response = await fetch('http://localhost:4001/api/answer', {
+      const response = await fetch('http://192.168.40.36:4001/api/answer', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -136,16 +136,16 @@ const Host = () => {
               <img src={questions[currentQuestionIndex].question_image} alt="" />
               
               <div className="d-flex flex-wrap justify-content-around p-3">
-  <div className="option-item mb-3 p-3  rounded " style={{ backgroundImage: `url(http://localhost:4001/image/${questions[currentQuestionIndex]?.option1_image})`, height:'150px', width:'200px' }}>
+  <div className="option-item mb-3 p-3  rounded " style={{ backgroundImage: `url(http://192.168.40.36:4001/image/${questions[currentQuestionIndex]?.option1_image})`, height:'150px', width:'200px' }}>
     <p>{questions[currentQuestionIndex]?.option1}</p>
   </div>
-  <div className="option-item mb-3 p-3  rounded " style={{ backgroundImage: `url(http://localhost:4001/image/${questions[currentQuestionIndex]?.option2_image})`, height:'150px', width:'200px' }}>
+  <div className="option-item mb-3 p-3  rounded " style={{ backgroundImage: `url(http://192.168.40.36:4001/image/${questions[currentQuestionIndex]?.option2_image})`, height:'150px', width:'200px' }}>
     <p>{questions[currentQuestionIndex]?.option2}</p>
   </div>
-  <div className="option-item mb-3 p-3  rounded " style={{ backgroundImage: `url(http://localhost:4001/image/${questions[currentQuestionIndex]?.option3_image})`, height:'150px', width:'200px' }}>
+  <div className="option-item mb-3 p-3  rounded " style={{ backgroundImage: `url(http://192.168.40.36:4001/image/${questions[currentQuestionIndex]?.option3_image})`, height:'150px', width:'200px' }}>
     <p>{questions[currentQuestionIndex]?.option3}</p>
   </div>
-  <div className="option-item mb-3 p-3  rounded " style={{ backgroundImage: `url(http://localhost:4001/image/${questions[currentQuestionIndex]?.option4_image})`, height:'150px', width:'200px' }}>
+  <div className="option-item mb-3 p-3  rounded " style={{ backgroundImage: `url(http://192.168.40.36:4001/image/${questions[currentQuestionIndex]?.option4_image})`, height:'150px', width:'200px' }}>
     <p>{questions[currentQuestionIndex]?.option4}</p>
   </div>
 </div>

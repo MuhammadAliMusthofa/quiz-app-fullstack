@@ -13,7 +13,7 @@ function CreateQuizPage() {
 
   useEffect(() => {
     async function fetchQuizData() {
-      const response = await fetch(`http://localhost:4001/api/question-list/${quizId}`);
+      const response = await fetch(`http://192.168.40.36:4001/api/question-list/${quizId}`);
       if (response.ok) {
         const data = await response.json();
         setQuestions(data.data);
@@ -31,7 +31,7 @@ function CreateQuizPage() {
     const fetchQuizName = async () => {
       try {
         const userId = sessionStorage.getItem("userId");
-        const response = await fetch(`http://localhost:4001/api/quiz/${userId}`);
+        const response = await fetch(`http://192.168.40.36:4001/api/quiz/${userId}`);
         if (response.ok) {
           const data = await response.json();
           const quiz = data.data.find((item) => item.id === parseInt(quizId));
@@ -82,7 +82,7 @@ function CreateQuizPage() {
     });
   
     try {
-      const response = await fetch(`http://localhost:4001/api/createDataQuiz/${quizId}`, {
+      const response = await fetch(`http://192.168.40.36:4001/api/createDataQuiz/${quizId}`, {
         method: "POST",
         body: formData,
       });
@@ -117,7 +117,7 @@ function CreateQuizPage() {
                 {question.questionImage && (
                   <CardMedia 
                     component="img"
-                    image={`http://localhost:4001/image/${question.questionImage}`} // Adjust the path as needed
+                    image={`http://192.168.40.36:4001/image/${question.questionImage}`} // Adjust the path as needed
                     alt="Question image"
                     sx={{ height: 140, my: 2, borderRadius:'8px' }}
                   />
@@ -130,7 +130,7 @@ function CreateQuizPage() {
                         <CardMedia 
                         className="img-fluid"
                           component="img"
-                          image={`http://localhost:4001/image/${question[`${option}_image`]}`} // Adjust the path as needed
+                          image={`http://192.168.40.36:4001/image/${question[`${option}_image`]}`} // Adjust the path as needed
                           alt={`Option ${idx + 1} image`}
                           sx={{ height: 100, mt: 1, width:250 }}
                         />

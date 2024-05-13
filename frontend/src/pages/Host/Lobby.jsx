@@ -12,7 +12,7 @@ function LobbyPage() {
   // Fungsi untuk mengambil data game dari API
   const fetchGameData = async () => {
     try {
-      const response = await fetch(`http://localhost:4001/api/quiz_title/${gameId}`);
+      const response = await fetch(`http://192.168.40.36:4001/api/quiz_title/${gameId}`);
       if (response.ok) {
         const data = await response.json();
         setGameData(data); // Simpan data game ke dalam state
@@ -29,7 +29,7 @@ function LobbyPage() {
   // Fungsi untuk mengambil data pemain dari API
   const fetchPlayers = async () => {
     try {
-      const response = await fetch(`http://localhost:4001/api/players/${gameId}`);
+      const response = await fetch(`http://192.168.40.36:4001/api/players/${gameId}`);
       if (response.ok) {
         const data = await response.json();
         setPlayers(data.data); // Simpan data pemain ke dalam state
@@ -58,7 +58,7 @@ function LobbyPage() {
   // Fungsi untuk memulai game
   const startGame = async () => {
     try {
-      const response = await fetch(`http://localhost:4001/api/start/${gameCode}`, {
+      const response = await fetch(`http://192.168.40.36:4001/api/start/${gameCode}`, {
         method: "PUT",
       });
       if (response.ok) {
