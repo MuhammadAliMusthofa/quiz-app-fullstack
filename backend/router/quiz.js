@@ -920,76 +920,7 @@ router.get('/player-score/:gameCode', async (req, res) => {
 
             const gameId = gameResult[0].game_id;
 
-            // Query untuk mendapatkan data pemain berdasarkan game_id dan mengurutkannya berdasarkan skor tertinggi
-            const sqlGetPlayerScore = `
-            SELECT player.name AS player_name, 
-                    SUM(CASE WHEN answer.answer_text = question.correct_answer THEN 1 ELSE 0 END) AS total_correct_answers,
-                    player.score AS player_score,
-                    COUNT(answer.id) AS total_answers
-
-                    
-            FROM player
-            LEFT JOIN answer ON player.id = answer.player_id
-            LEFT JOIN question ON answer.question_id = question.id
-            WHERE player.game_id = ? 
-            GROUP BY player.id
-            ORDER BY player.score DESC
-            `;
-
-            connection.query(sqlGetPlayerScore, [gameId], async (err, playerResult) => {
-                if (err) {
-                    return res.status(500).json({
-                        status: false,
-                        message: 'Internal Server Error',
-                        error: err.message
-                    });
-                }
-
-                return res.status(200).json({
-                    status: true,
-                    message: 'Player scores retrieved successfully',
-                    data: playerResult
-                });
-            });
-        });
-    } catch (error) {
-        return res.status(500).json({
-            status: false,
-            message: 'Internal Server Error',
-            error: error.message
-        });
-    }
-});
-
-// player score si player
-router.post('/own-player-score/:gameCode', async (req, res) => {
-    try {
-        const { gameCode } = req.params;
-        const { player_id } = req.body;
-
-        const sqlGetGameId = `
-            SELECT id AS game_id
-            FROM game
-            WHERE game_code = ?
-        `;
-        connection.query(sqlGetGameId, [gameCode], async (err, gameResult) => {
-            if (err) {
-                return res.status(500).json({
-                    status: false,
-                    message: 'Internal Server Error',
-                    error: err.message
-                });
-            }
-
-            if (gameResult.length === 0) {
-                return res.status(404).json({
-                    status: false,
-                    message: 'Game not found'
-                });
-            }
-
-            const gameId = gameResult[0].game_id;
-
+            // Query untuk mendapatkan jumlah total pemain dari game_id yang sama
             const sqlGetTotalPlayers = `
                 SELECT COUNT(id) AS total_players
                 FROM player
@@ -1006,14 +937,22 @@ router.post('/own-player-score/:gameCode', async (req, res) => {
 
                 const totalPlayers = totalPlayersResult[0].total_players;
 
+                // Query untuk mendapatkan data pemain berdasarkan game_id dan mengurutkannya berdasarkan skor tertinggi
                 const sqlGetPlayerScore = `
-                    SELECT player.name AS player_name, game.game_code, player.score AS player_score
+                    SELECT player.id, player.name AS player_name, 
+                        SUM(CASE WHEN answer.answer_text = question.correct_answer THEN 1 ELSE 0 END) AS total_correct_answers,
+                        player.score AS player_score,
+                        COUNT(answer.id) AS total_answers
                     FROM player
-                    JOIN game ON player.game_id = game.id
-                    WHERE player.id = ? AND player.game_id = ?
+                    LEFT JOIN answer ON player.id = answer.player_id
+                    LEFT JOIN question ON answer.question_id = question.id
+                    WHERE player.game_id = ? 
+                    GROUP BY player.id
+                    ORDER BY player.score DESC
+
                 `;
-                
-                connection.query(sqlGetPlayerScore, [player_id, gameId], async (err, playerScoreResult) => {
+
+                connection.query(sqlGetPlayerScore, [gameId], async (err, playerResult) => {
                     if (err) {
                         return res.status(500).json({
                             status: false,
@@ -1022,24 +961,17 @@ router.post('/own-player-score/:gameCode', async (req, res) => {
                         });
                     }
 
-                    if (playerScoreResult.length === 0) {
-                        return res.status(404).json({
-                            status: false,
-                            message: 'Player not found in this game'
-                        });
-                    }
-
-                    const playerScore = playerScoreResult[0];
+                    // Tambahkan peringkat untuk setiap pemain dalam data
+                    const rankedPlayerResult = playerResult.map((player, index) => ({
+                        ...player,
+                        player_rank: index + 1
+                    }));
 
                     return res.status(200).json({
                         status: true,
-                        message: 'Player score retrieved successfully',
-                        data: {
-                            player_name: playerScore.player_name,
-                            game_code: playerScore.game_code,
-                            total_players: totalPlayers,
-                            player_score: playerScore.player_score
-                        }
+                        message: 'Player scores retrieved successfully',
+                        total_players: totalPlayers,
+                        data: rankedPlayerResult
                     });
                 });
             });
@@ -1052,6 +984,12 @@ router.post('/own-player-score/:gameCode', async (req, res) => {
         });
     }
 });
+
+
+
+// player score si player
+
+
 
 
   

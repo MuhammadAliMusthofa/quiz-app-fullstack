@@ -1,21 +1,22 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { AppBar, Toolbar, Button, IconButton, Typography, Container, Modal, Box, TextField, Select, MenuItem, FormControl, InputLabel } from '@mui/material';
+import MenuIcon from '@mui/icons-material/Menu';
 
 function QuizListPage() {
   const [quizzes, setQuizzes] = useState([]);
-  const [selectedQuiz, setSelectedQuiz] = useState(""); // State untuk menyimpan quiz yang dipilih
-  const [modalVisible, setModalVisible] = useState(false); // State untuk mengatur keterlihatan modal
-  const [quizTitle, setQuizTitle] = useState(""); // State untuk menyimpan judul quiz
-  const navigate = useNavigate(); // Gunakan useNavigate untuk navigasi antar halaman
+  const [selectedQuiz, setSelectedQuiz] = useState("");
+  const [modalVisible, setModalVisible] = useState(false);
+  const [quizTitle, setQuizTitle] = useState("");
+  const navigate = useNavigate();
 
-  // Fungsi untuk mengambil daftar quiz dari API
   const fetchQuizzes = async () => {
     try {
       const userId = sessionStorage.getItem("userId");
       const response = await fetch(`http://localhost:4001/api/quiz/${userId}`);
       if (response.ok) {
         const data = await response.json();
-        setQuizzes(data.data); // Menyimpan daftar quiz ke state quizzes
+        setQuizzes(data.data);
       } else {
         console.error("Failed to fetch quizzes:", response.statusText);
       }
@@ -24,127 +25,143 @@ function QuizListPage() {
     }
   };
 
-  // Memanggil fungsi fetchQuizzes saat komponen dimuat
   useEffect(() => {
     fetchQuizzes();
-  }, []); // Membuat efek hanya dijalankan sekali saat komponen dimuat
+  }, []);
 
-  // Fungsi untuk menangani perubahan pada form select
   const handleSelectChange = (e) => {
     setSelectedQuiz(e.target.value);
   };
 
-  // Fungsi untuk menangani klik tombol "Start Game"
   const handleStartGame = async () => {
-    try {
-      const userId = sessionStorage.getItem("userId"); // Ambil admin_id dari sessionStorage
-      const response = await fetch(`http://localhost:4001/api/startgame/${selectedQuiz}`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({ userId }) // Sertakan admin_id dalam body request
-      });
-      if (response.ok) {
-        const data = await response.json();
-        // Game berhasil dimulai, arahkan pengguna ke halaman lobby
-        navigate(`/lobby/host/${data.game_id}`); // Navigasi ke halaman lobby dengan menyertakan data response
-      } else {
-        console.error("Failed to start game:", response.statusText);
-      }
-    } catch (error) {
-      console.error("Error starting game:", error);
+    const userId = sessionStorage.getItem("userId");
+    const response = await fetch(`http://localhost:4001/api/startgame/${selectedQuiz}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ userId })
+    });
+    if (response.ok) {
+      const data = await response.json();
+      navigate(`/lobby/host/${data.game_id}`);
+    } else {
+      console.error("Failed to start game:", response.statusText);
     }
   };
 
-  // Fungsi untuk menangani submit form create quiz
   const handleSubmitCreateQuiz = async () => {
-    try {
-      const userId = sessionStorage.getItem("userId"); // Ambil admin_id dari sessionStorage
-      const response = await fetch(`http://localhost:4001/api/quiz/add/${userId}`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({ title: quizTitle }) // Sertakan judul quiz dalam body request
-      });
-      if (response.ok) {
-        // Quiz berhasil dibuat, tutup modal dan perbarui daftar quiz
-        setModalVisible(false);
-        fetchQuizzes();
-      } else {
-        console.error("Failed to create quiz:", response.statusText);
-      }
-    } catch (error) {
-      console.error("Error creating quiz:", error);
+    const userId = sessionStorage.getItem("userId");
+    const response = await fetch(`http://localhost:4001/api/quiz/add/${userId}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ title: quizTitle })
+    });
+    if (response.ok) {
+      setModalVisible(false);
+      fetchQuizzes();
+    } else {
+      console.error("Failed to create quiz:", response.statusText);
     }
   };
 
-  const handleLogout = async () => {
-           
-      sessionStorage.removeItem('userId');  // Assuming the userId is stored with this key
-      // Navigate to the home page
-      navigate('/');
-        
+  const handleLogout = () => {
+    sessionStorage.removeItem('userId');
+    navigate('/');
+  };
+
+  const modalStyle = {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: 400,
+    bgcolor: 'background.paper',
+    border: '2px solid grey',
+    boxShadow: 24,
+    p: 4,
+    borderRadius:'8px'
   };
 
   return (
     <div className="quiz-bg">
-      <div style={{float:'right'}}> <button className="btn btn-danger mt-5 me-5" onClick={handleLogout}>Logout</button></div>
-      <h1 className="my-4 ms-5">Quiz List</h1>
-      <div className="col-md-2">
-          <button className="btn btn-success ms-5" onClick={() => setModalVisible(true)}>Create Quiz</button>
-        </div>
-      <ul className="list-group mt-3 w-50 ms-5">
-        {quizzes.map((quiz) => (
-          <li key={quiz.id} className="list-group-item ">
-            <Link className="text-decoration-none" to={`/quiz/detail/${quiz?.id}`}>{quiz?.title}</Link>
-          </li>
-        ))}
-      </ul>
+      <AppBar position="static">
+        <Toolbar>
+          {/* <IconButton
+            size="large"
+            edge="start"
+            color="inherit"
+            aria-label="menu"
+            sx={{ mr: 2 }}
+          >
+            <MenuIcon />
+          </IconButton> */}
+          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+            Quiz 
+          </Typography>
+          <Button color="inherit" onClick={handleLogout}>Logout</Button>
+        </Toolbar>
+      </AppBar>
+      <Container>
+          <Typography variant="h3" component="div" sx={{ flexGrow: 1, mt:3 }}>
+            Quiz List
+          </Typography>
 
-      <div className="row mt-3 m-5 pt-5 pb-5 ps-2 w-50 rounded " id="game-select">
-        <div className="col-md-8 ">
-          <h5 className=" text-light mb-3 ">Mainkan Game Quiz</h5>
-          <select className="form-select " onChange={handleSelectChange} value={selectedQuiz}>
-            <option value="">Select Quiz Game</option>
-            {quizzes.map((quiz) => (
-              <option key={quiz.id} value={quiz.id}>{quiz.title}</option>
-            ))}
-          </select>
-        <div className="mt-3 ">
-          <button className="btn btn-primary ms-auto" onClick={handleStartGame}>Start Game</button>
-        </div>
-        </div>
-        
-      </div>
+        <Button variant="contained" color="success" sx={{ mt: 3 }} onClick={() => setModalVisible(true)}>Create Quiz</Button>
+        <ul className="list-group mt-3">
+          {quizzes.map((quiz) => (
+            <li key={quiz.id} className="list-group-item">
+              <Link className="text-decoration-none" to={`/quiz/detail/${quiz.id}`}>{quiz.title}</Link>
+            </li>
+          ))}
+        </ul>
 
-      {/* Modal untuk create quiz */}
-      {modalVisible && (
-        <div className="modal fade show" tabIndex="-1" style={{ display: "block" }}>
-          <div className="modal-dialog">
-            <div className="modal-content">
-              <div className="modal-header">
-                <h5 className="modal-title">Create Quiz</h5>
-                <button type="button" className="btn-close" onClick={() => setModalVisible(false)}></button>
-              </div>
-              <div className="modal-body">
-                <div className="mb-3">
-                  <label htmlFor="quizTitle" className="form-label">Quiz Title:</label>
-                  <input type="text" className="form-control" id="quizTitle" value={quizTitle} onChange={(e) => setQuizTitle(e.target.value)} />
-                </div>
-              </div>
-              <div className="modal-footer">
-                <button type="button" className="btn btn-secondary" onClick={() => setModalVisible(false)}>Close</button>
-                <button type="button" className="btn btn-primary" onClick={handleSubmitCreateQuiz}>Create</button>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-     
+          <Box sx={{mt:3, background: 'rgba(0, 0, 0, 0.5) !important', backdropFilter: 'blur(8px)',color:' #fff'}} className=" p-2 rounded card-play-quiz">
+          <Typography variant="h5" component="div" sx={{ flexGrow: 1, mt:3 }}>
+            Bermain
+          </Typography>
+            <FormControl fullWidth sx={{ mt: 3 }}>
+              <InputLabel sx={{color:'white'}} id="select-quiz-label">Select Quiz Game</InputLabel>
+              <Select
+                labelId="select-quiz-label"
+                value={selectedQuiz}
+                label="Select Quiz Game"
+                onChange={handleSelectChange}
+              >
+                {quizzes.map((quiz) => (
+                  <MenuItem key={quiz.id} value={quiz.id}>{quiz.title}</MenuItem>
+                ))}
+              </Select>
+              <Button variant="contained" sx={{ mt: 3, mb:3 }} onClick={handleStartGame}>Start Game</Button>
+            </FormControl>
+
+          </Box>
+      </Container>
+
+      <Modal
+        open={modalVisible}
+        onClose={() => setModalVisible(false)}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box sx={modalStyle}>
+          <Typography id="modal-modal-title" variant="h6" component="h2">
+            Create Quiz
+          </Typography>
+          <TextField
+            fullWidth
+            label="Quiz Title"
+            id="quizTitle"
+            value={quizTitle}
+            onChange={(e) => setQuizTitle(e.target.value)}
+            sx={{ mt: 2 }}
+          />
+          <Button variant="contained" sx={{ mt: 2 }} onClick={handleSubmitCreateQuiz}>Create</Button>
+        </Box>
+      </Modal>
     </div>
-    
   );
 }
 

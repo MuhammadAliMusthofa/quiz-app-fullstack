@@ -1,10 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
+import Snackbar from '@mui/material/Snackbar';
+import MuiAlert from '@mui/material/Alert';
 
 const Leaderboard = () => {
   const { gameCode } = useParams();
   const [playerScores, setPlayerScores] = useState([]);
   const userId = sessionStorage.getItem('userId');
+  const [openSnackbar, setOpenSnackbar] = useState(false);
+
   const navigate = useNavigate();
   useEffect(() => {
     const fetchPlayerScores = async () => {
@@ -44,8 +48,12 @@ const Leaderboard = () => {
 
       // Tampilkan alert "Game selesai" jika berhasil
       
-      alert("Game selesai");
-      navigate('/quiz/admin');
+      handleSnackbarOpen();
+
+      // Pindah halaman setelah 3 detik
+      setTimeout(() => {
+        navigate('/quiz/admin');
+      }, 1000);
     } catch (error) {
       // Tampilkan alert "Gagal menyelesaikan game" jika terjadi kesalahan
       alert("Gagal menyelesaikan game");
@@ -53,8 +61,28 @@ const Leaderboard = () => {
     }
   };
 
+  const handleSnackbarClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+  
+    setOpenSnackbar(false);
+  };
+  
+  const handleSnackbarOpen = () => {
+    setOpenSnackbar(true);
+  };
+  
+
   return (
-    <div className="container mt-5">
+    <>
+      <Snackbar open={openSnackbar} autoHideDuration={3000} anchorOrigin={{ vertical: 'top', horizontal: 'center' }} onClose={handleSnackbarClose}>
+        <MuiAlert elevation={6} variant="filled"   severity="success" onClose={handleSnackbarClose}>
+          Mengakhiri Game 
+        </MuiAlert>
+      </Snackbar>
+    <div className="player-page ">
+      <div className="container mt-5">
       <h2 className="mb-4">Leaderboard</h2>
       <table className="table">
         <thead>
@@ -81,10 +109,12 @@ const Leaderboard = () => {
 
       {userId && (
         <div className="mt-5 d-flex justify-content-center">
-          <button className="btn btn-lg btn-info" onClick={handleFinishGame}>Finish</button>
+          <button className="btn btn-lg " id="button-finish" onClick={handleFinishGame}>Finish</button>
         </div>
       )}
+      </div>
     </div>
+    </>
   );
 };
 

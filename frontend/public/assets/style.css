@@ -205,3 +205,20 @@ body {
     border-radius: 15px;
 }
 
+.rank-compo{
+    background: rgba(0, 0, 0, 0.5) !important; 
+    backdrop-filter: blur(8px);
+    color: #fff;
+    border-radius: 15px;
+}
+
+#button-finish{
+    background-color: #8728a7;
+    color:white;
+    box-shadow: 0px 2px 4px rgba(255, 255, 255, 0.5); /* Bayangan putih */
+}
+
+#button-finish:hover{
+    transform: scale(1.1); 
+    color:white;
+}

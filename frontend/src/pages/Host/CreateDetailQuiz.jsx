@@ -21,7 +21,10 @@ function CreateQuizPage() {
         console.error("Failed to fetch quiz questions:", response.statusText);
       }
     }
-    fetchQuizData();
+    const intervalId = setInterval(fetchQuizData, 1000);
+
+    // Bersihkan interval saat komponen di-unmount atau gameCode berubah
+    return () => clearInterval(intervalId);
   }, [quizId]);
 
   useEffect(() => {
@@ -121,7 +124,7 @@ function CreateQuizPage() {
                 )}
                 <div className="d-flex flex-wrap justify-content-around">
                   {['option1', 'option2', 'option3', 'option4'].map((option, idx) => (
-                    <div className="border mt-3 rounded p-2 " key={idx}>
+                    <div className="border mt-3 rounded p-2 " style={{height:'100px', width:'250px'}} key={idx}>
                      <Typography  variant="h5"> {`Option ${ idx + 1}`}: {question[option]}</Typography>
                       {question[`${option}_image`] && (
                         <CardMedia 
