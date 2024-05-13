@@ -2,10 +2,14 @@ import React, { useState, useEffect } from "react";
 import { useParams, useNavigate , Link} from "react-router-dom";
 import Statistik from "./Statistik";
 import { Row, Col } from "react-bootstrap";
+import Snackbar from '@mui/material/Snackbar';
+import MuiAlert from '@mui/material/Alert';
 
 const InGame = () => {
   const { gameCode } = useParams();
   const [status, setStatus] = useState("waiting");
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+
   const [questions, setQuestions] = useState([]);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [countdown, setCountdown] = useState(10);
@@ -14,13 +18,20 @@ const InGame = () => {
   const [selesai, setselesai] = useState(false);
   const [waktuMundur , setwaktuMundur] = useState(1000);
   const [selectedAnswer, setSelectedAnswer] = useState(null); // State untuk melacak jawaban yang dipilih
-  const [visibleOptions, setVisibleOptions] = useState({
-    option1: true,
-    option2: true,
-    option3: true,
-    option4: true,
+  const [optionsDisabled, setOptionsDisabled] = useState({
+    option1: false,
+    option2: false,
+    option3: false,
+    option4: false
   });
-  const [answerDisabled, setAnswerDisabled] = useState(false); // State untuk menandai apakah jawaban sudah dipilih
+  
+  // State untuk melacak opsi jawaban yang sudah dipilih
+const [answeredOptions, setAnsweredOptions] = useState({});
+
+// Membuat fungsi untuk reset opsi jawaban yang sudah dipilih saat berganti pertanyaan
+useEffect(() => {
+  setAnsweredOptions({});
+}, [currentQuestionIndex]);
   const navigate = useNavigate();
 
   // api untuk mengambil status game
@@ -95,15 +106,24 @@ const InGame = () => {
   const timer = 10;
 
   // api jawaban
-  const handleAnswerSelection = async (e,answer) => {
-    const answerOption = e.target.id;
-    console.log(e.target.id)
-    // console.log(answer)
+ // Memperbarui fungsi handleAnswerSelection untuk memeriksa apakah opsi sudah dipilih
+const handleAnswerSelection = async (e, answer) => {
+  const answerOption = e.target.id;
+
+  if (!answeredOptions[currentQuestionIndex]) {
     try {
-      // Mengambil player_id dari localStorage
       const playerId = sessionStorage.getItem('playerId');
-      // const optionNumber = answer.charAt(answer.length - 1);
       setSelectedAnswer(answer); // Menetapkan jawaban yang dipilih
+
+       // Menampilkan Snackbar "Anda sudah menjawab"
+       setSnackbarOpen(true);
+
+      // Menonaktifkan opsi yang dipilih
+      setAnsweredOptions(prevState => ({
+        ...prevState,
+        [currentQuestionIndex]: true
+      }));
+
       const response = await fetch(`http://localhost:4001/api/answer`, {
         method: 'POST',
         headers: {
@@ -113,10 +133,11 @@ const InGame = () => {
           player_id: playerId,
           question_id: questions[currentQuestionIndex]?.question_id,
           answer_text: answerOption,
-          countdown: timer - countdown, // Ganti dengan nilai countdown yang sesuai
+          countdown: timer - countdown,
           game_code: gameCode,
         }),
       });
+
       if (response.ok) {
         console.log("Answer submitted successfully");
       } else {
@@ -125,7 +146,8 @@ const InGame = () => {
     } catch (error) {
       console.error("Error submitting answer:", error);
     }
-  };
+  }
+};
 
   const handleFindNewGame = () => {
     // Hapus item playerId dari session storage
@@ -134,6 +156,9 @@ const InGame = () => {
 
   return (
     <div className="ingame-player">
+      
+      <div className=" d-flex justify-content-center align-items-center ">
+        <div className="col-md-8">
       {selesai  && (<Statistik 
         gameCode={gameCode} 
         currentQuestionIndex={currentQuestionIndex === questions.length ? currentQuestionIndex  : currentQuestionIndex - 1  } 
@@ -141,12 +166,23 @@ const InGame = () => {
         setCountdown={setCountdown} // Melewatkan prop setCountdown ke komponen Statistik
        />)} 
 
+        </div>
+
+
+      </div>
+
         {status === "waiting" ? (
          <div className=" shadow col-md-6 mx-auto mt-5 p-4 card-lobby">
 
           <h1 className="text-center">Menunggu Game dimulai...</h1>
          </div>
         ) : status === "ingame" && selesai == false ? (
+          <>
+          <Snackbar open={snackbarOpen} autoHideDuration={1000} anchorOrigin={{ vertical: 'top', horizontal: 'center' }} onClose={() => setSnackbarOpen(false)}>
+          <MuiAlert elevation={6} variant="filled" onClose={() => setSnackbarOpen(false)} severity="info">
+            Anda sudah menjawab
+          </MuiAlert>
+        </Snackbar>
           <div className="card shadow col-md-6 mx-auto mt-5 p-4 rounded" id="card-play-quiz">
           <div className="text-center">
             <h1 className="mb-4">Kuis {currentQuestionIndex +1}</h1>
@@ -154,24 +190,25 @@ const InGame = () => {
               <h1 className="display-1">{countdown}</h1>
               
               <Row>
-                <Col xs={12} md={6} className={`bg-primary p-4 ${selectedAnswer === questions[currentQuestionIndex]?.option1 ? "selected" : ""}`} onClick={(e) => handleAnswerSelection(e, questions[currentQuestionIndex]?.option1)} id="option1">
-                  <p>A</p> 
+                <Col xs={12} md={6} className={`bg-primary p-4 ${selectedAnswer === questions[currentQuestionIndex]?.option1 ? "selected" : ""}`} onClick={(e) => handleAnswerSelection(e, questions[currentQuestionIndex]?.option1)} id="option1" >
+                  A
                 </Col>
                 <Col xs={12} md={6} className={`bg-warning p-4 ${selectedAnswer === questions[currentQuestionIndex]?.option2 ? "selected" : ""}`} onClick={(e) => handleAnswerSelection(e, questions[currentQuestionIndex]?.option2)} id="option2">
-                  <p>B</p> 
+                  B
                 </Col>
               </Row>
               <Row>
                 <Col xs={12} md={6} className={`bg-success p-4 ${selectedAnswer === questions[currentQuestionIndex]?.option3 ? "selected" : ""}`} onClick={(e) => handleAnswerSelection(e, questions[currentQuestionIndex]?.option3)} id="option3">
-                  <p>C</p> 
+                  C 
                 </Col>
                 <Col xs={12} md={6} className={`bg-danger p-4 ${selectedAnswer === questions[currentQuestionIndex]?.option4 ? "selected" : ""}`} onClick={(e) => handleAnswerSelection(e, questions[currentQuestionIndex]?.option4)} id="option4">
-                  <p>D</p> 
+                  D
                 </Col>
               </Row>
             </div>
           </div>
       </div>
+          </>
         ) : status === "Finish" ? (
           <>
           <h1 className="text-center mb-4">Game Telah Selesai</h1>
