@@ -19,15 +19,15 @@ const cors = require('cors')
 app.use(cors())
 
 //import route karyawan
-const authRouters = require('./router/Auth/auth');
+const authRouters = require('./api/Auth/auth');
 app.use('/api/auth', authRouters); // use route posts di Express
 
 //import route karyawan
-const Routers = require('./router/game');
+const Routers = require('./api/game');
 app.use('/api/clone-kahoot', Routers); // use route posts di Express
 
 //import route karyawan
-const Routerss = require('./router/quiz');
+const Routerss = require('./api/quiz');
 app.use('/api', Routerss); // use route posts di Express
 
 router.get('/', (req, res) => {
