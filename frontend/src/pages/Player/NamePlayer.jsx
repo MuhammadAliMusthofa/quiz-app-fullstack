@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
+import api from '../../config/Api';
+
 
 function JoinGame() {
   const { game_code } = useParams();
@@ -11,7 +13,7 @@ function JoinGame() {
     // Fungsi untuk mengambil nama kuis dari API
     const fetchQuizName = async () => {
       try {
-        const response = await fetch(`http://192.168.40.36:4001/api/quiz_name/${game_code}`);
+        const response = await fetch(`${api}/quiz_name/${game_code}`);
         if (response.ok) {
           const data = await response.json();
           setQuizName(data.data.quiz_name); // Set nama kuis ke dalam state
@@ -29,7 +31,7 @@ function JoinGame() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch(`http://192.168.40.36:4001/api/players/${game_code}`, {
+      const response = await fetch(`${api}/players/${game_code}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
@@ -50,12 +52,13 @@ function JoinGame() {
   };
 
   return (
-    <div className="player-page d-flex justify-content-center align-items-center text-light">
+    <div className="nama-player-page ">
 
-      <div className="">
-        <div>
+      <div className=" d-flex flex-column justify-content-center align-items-center text-light h-75">
+        <div style={{width:'350px', padding:'30px'}}>
 
-        <h1 className=" text-center">Join Quiz Game : {quizName}</h1>
+        <h3 className=" text-center ">Join Quiz :</h3>
+        <h1 className=" text-center  "> {quizName} </h1>
         </div>
 
       <form onSubmit={handleSubmit} className="player-name-card ">

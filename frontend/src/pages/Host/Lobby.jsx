@@ -1,5 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
+import { Howl } from 'howler'; // Import Howl from howler
+import { Fade, Bounce } from "react-awesome-reveal";
+import { Modal , Box} from "@mui/material";
+import QRCode from 'react-qr-code';
+import api from '../../config/Api';
 
 function LobbyPage() {
   const { gameId } = useParams(); // Ambil gameId dari params URL
@@ -8,11 +13,16 @@ function LobbyPage() {
   const [quizTitle, setQuizTitle] = useState(""); // State untuk menyimpan judul kuis
   const [status, setStatus] = useState(""); // State untuk menyimpan status permainan
   const navigate = useNavigate();
+  const [audio, setAudio] = useState(null);
+  const [loading, setLoading] = useState(false);
+
+
+const GO = "/public/assets/going.gif";
 
   // Fungsi untuk mengambil data game dari API
   const fetchGameData = async () => {
     try {
-      const response = await fetch(`http://192.168.40.36:4001/api/quiz_title/${gameId}`);
+      const response = await fetch(`${api}/quiz_title/${gameId}`);
       if (response.ok) {
         const data = await response.json();
         setGameData(data); // Simpan data game ke dalam state
@@ -29,7 +39,7 @@ function LobbyPage() {
   // Fungsi untuk mengambil data pemain dari API
   const fetchPlayers = async () => {
     try {
-      const response = await fetch(`http://192.168.40.36:4001/api/players/${gameId}`);
+      const response = await fetch(`${api}/players/${gameId}`);
       if (response.ok) {
         const data = await response.json();
         setPlayers(data.data); // Simpan data pemain ke dalam state
@@ -40,6 +50,26 @@ function LobbyPage() {
       console.error("Error fetching players:", error);
     }
   };
+
+ 
+  useEffect(() => {
+    const audioFile = '/assets/lobby-sound.mp3'; 
+
+    const audioInstance = new Howl({
+      src: [audioFile],
+      html5: true, 
+      volume: 0.0, //isi volume 
+      html5PoolSize: 10,
+      loop: true,
+    });
+
+    setAudio(audioInstance);
+    audioInstance.play();
+
+    return () => {
+      audioInstance.unload();
+    };
+  }, []);
 
   // Memanggil fungsi fetchGameData saat komponen dimuat
   useEffect(() => {
@@ -57,13 +87,18 @@ function LobbyPage() {
 
   // Fungsi untuk memulai game
   const startGame = async () => {
+    setLoading(true);
     try {
-      const response = await fetch(`http://192.168.40.36:4001/api/start/${gameCode}`, {
+      const response = await fetch(`${api}/start/${gameCode}`, {
         method: "PUT",
       });
       if (response.ok) {
-        navigate(`/host/ingame/${gameCode}`);
-      } else {
+        setTimeout(() => {
+          navigate(`/host/ingame/${gameCode}`);
+          setLoading(false);
+        }, 4000);
+        
+        } else {
         console.error("Failed to start game:", response.statusText);
       }
     } catch (error) {
@@ -73,11 +108,34 @@ function LobbyPage() {
 
   return (
     <div className="player-page">
-      <div className="card-lobby shadow col-md-6 mx-auto mt-5 p-4">
-        <h1 className="text-center mb-4">Lobby</h1>
-        <h2 className="text-center mb-4"> {quizTitle}</h2>
+
+        <h2 className="text-center mb-4 mt-3 text-light">Lobby</h2>
+      <Fade >
+        <div className="m-3">
+
+        <div className=" col-md-6 p-4 card-lobby" style={{ margin: '20px auto' }}>
+      <h1 className="text-center text-bold mb-4 text-quiz">" {quizTitle} "</h1>
+      <div className="d-flex justify-content-around flex-wrap">
+        <div className="game-code-container">
+          <p className="text-center mt-3">Insert Game Code</p>
+          <h1 className="mb-3 text-bold text-center game-code">
+            {gameData?.data?.game_code}
+          </h1>
+        </div>
+        <div className="mt-3  border rounded  d-flex align-items-center qr-code-container bg-light p-1" style={{width:'200px', height:'200px'}} >
+          <QRCode value="http://localhost:5173/" style={{width:'100%'}}  />
+        </div>
+      </div>
+    </div>
+        </div>
+
+      </Fade>
+
+      <div className=" shadow col-md-8 mx-auto mt-5 p-4 ">
+        {/* <h1  className="text-center text-bold mb-4 text-warning">" {quizTitle} "</h1> */}
         {status === "waiting" ? (
-          <p className="text-center">Waiting for other players to join...</p>
+          
+          <h2 className="text-center text-light">Waiting for other players to join...</h2>
         ) : status === "ingame" ? (
           <p className="text-center">Game is in progress</p>
         ) : status === "finish" ? (
@@ -87,32 +145,58 @@ function LobbyPage() {
         )}
 
         {gameData ? (
+
+          <>
           <div className="">
-            <p className="mb-3">Game Code: {gameData?.data?.game_code}</p>
+            {/* <p className="mb-3 text-center">Game Code</p>
+            <h1 className="mb-3 text-bold text-center">{gameData?.data?.game_code}</h1> */}
 
             {players.length > 0 ? (
               <>
-                <h2 className="mb-3">Players:</h2>
-                <ul className="list-group l">
-                  {players.map(player => (
-                    <li key={player?.id} className="list-group-item" id="lobby-host">{player?.name}</li>
+                <h2 className="mb-3 text-light">Players:</h2>
+              
+                <div className=" d-flex flex-wrap justify-content-center">
+                  {players.map((player) => (
+                    <Bounce cascade damping={0.1} key={player?.id}>
+                      <div className="list-player p-3 rounded d-flex align-items-center me-3" id="lobby-host">
+                        <h5>{player?.name}</h5>
+                      </div>
+                    </Bounce>
                   ))}
-                </ul>
+                </div>
               </>
             ) : (
               <p>No players in the game</p>
             )}
           </div>
+          <Modal
+            open={loading}
+            onClose={() => {}}
+            aria-labelledby="loading-modal"
+            aria-describedby="loading-modal-description"
+            style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+          >
+            <Box className='p-5' sx={{ border: 'none', boxShadow: 'none', outline: 'none' }}>
+              <img src={GO} alt="Loading" style={{ width: '300px' }} />
+            </Box>
+          </Modal>
+
+
+          </>
         ) : (
           <p>Loading game data...</p>
         )}
 
         {/* Tambahkan teks dan tombol untuk menunggu pemain */}
         {status === "waiting" && (
-          <button onClick={startGame} className="btn w-25 d-block mx-auto mt-3 shadow" id="button-lobby">Start</button>
+          <button onClick={startGame} className="btn w-50 d-block mx-auto mt-5 shadow p-3" id="button-lobby">START GAME</button>
+
+ 
         )}
       </div>
     </div>
+
+    
   );
 }
 

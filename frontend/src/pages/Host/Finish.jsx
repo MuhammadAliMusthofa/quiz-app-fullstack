@@ -2,6 +2,41 @@ import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert from '@mui/material/Alert';
+import { styled } from '@mui/system';
+import {
+  Table,
+  TableHead,
+  TableBody,
+  TableRow,
+  TableCell,
+  Paper,
+  TableContainer
+} from '@mui/material';
+import api from '../../config/Api';
+
+// Styled components using MUI's styled
+const StyledTableContainer = styled(TableContainer)({
+  borderRadius: '8px',
+  overflow: 'hidden',
+});
+
+const StyledTableHead = styled(TableHead)({
+  backgroundColor: '#fff',
+  '& th': {
+    color: 'black',
+  },
+});
+
+const StyledTableRowOdd = styled(TableRow)({
+  backgroundColor: '#d8bfd8',
+});
+
+const StyledTableRowEven = styled(TableRow)({
+  backgroundColor: '#8728a7',
+  '& td, & th': {
+    color: 'white',
+  },
+});
 
 const Leaderboard = () => {
   const { gameCode } = useParams();
@@ -13,7 +48,7 @@ const Leaderboard = () => {
   useEffect(() => {
     const fetchPlayerScores = async () => {
       try {
-        const response = await fetch(`http://192.168.40.36:4001/api/player-score/${gameCode}`);
+        const response = await fetch(`${api}/player-score/${gameCode}`);
         if (!response.ok) {
           throw new Error("Failed to fetch player scores");
         }
@@ -34,7 +69,7 @@ const Leaderboard = () => {
 
   const handleFinishGame = async () => {
     try {
-      const response = await fetch(`http://192.168.40.36:4001/api/game/finish/${gameCode}`, {
+      const response = await fetch(`${api}/game/finish/${gameCode}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -47,7 +82,7 @@ const Leaderboard = () => {
       }
 
       // Tampilkan alert "Game selesai" jika berhasil
-      
+      sessionStorage.removeItem('gameData');
       handleSnackbarOpen();
 
       // Pindah halaman setelah 3 detik
@@ -81,31 +116,51 @@ const Leaderboard = () => {
           Mengakhiri Game 
         </MuiAlert>
       </Snackbar>
-    <div className="player-page ">
+    <div className="leaderboard-player ">
       <div className="container mt-5">
+        
       <h2 className="mb-4">Leaderboard</h2>
-      <table className="table">
-        <thead>
-          <tr>
-            <th scope="col">Rank</th>
-            <th scope="col">Nickname </th>
-            <th scope="col">Jawaban Terjawab</th>
-            <th scope="col">Jawaban Benar</th>
-            <th scope="col">Score</th>
-          </tr>
-        </thead>
-        <tbody>
-          {playerScores.map((player, index) => (
-            <tr key={index} className={index === 0 ? 'table-warning' : ''}>
-              <th scope="row">{index + 1}</th>
-              <td>{player.player_name}</td>
-              <td>{player.total_answers}</td>
-              <td>{player.total_correct_answers}</td>
-              <td>{player.player_score !== null ? player.player_score : 0}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+      <StyledTableContainer component={Paper}>
+          <Table aria-label="simple table">
+            <StyledTableHead>
+              <TableRow>
+                <TableCell>Rank</TableCell>
+                <TableCell>Nickname </TableCell>
+                <TableCell>Jawaban Terjawab</TableCell>
+                <TableCell>Jawaban Benar</TableCell>
+                <TableCell>Score</TableCell>
+              </TableRow>
+            </StyledTableHead>
+            <TableBody>
+              {playerScores.map((player, index) => (
+                <React.Fragment key={index}>
+                   {index % 2 === 0 ? (
+                    <StyledTableRowOdd>
+                  {/* <TableRow className={player.id === parseInt(playerId) ? 'table-info' : ""}>
+                  </TableRow> */}
+                    <TableCell>{index + 1}</TableCell>
+                    <TableCell>{player.player_name}</TableCell>
+                    <TableCell>{player.total_answers}</TableCell>
+                    <TableCell>{player.total_correct_answers}</TableCell>
+                    <TableCell>{player.player_score !== null ? player.player_score : 0}</TableCell>
+                  </StyledTableRowOdd>
+                    ) : (
+                    <StyledTableRowEven>
+                    <TableCell>{index + 1}</TableCell>
+                    <TableCell>{player.player_name}</TableCell>
+                    <TableCell>{player.total_answers}</TableCell>
+                    <TableCell>{player.total_correct_answers}</TableCell>
+                    <TableCell>{player.player_score !== null ? player.player_score : 0}</TableCell>
+                  {/* <TableRow className={player.id === parseInt(playerId) ? 'table-info' : ""}>
+                  </TableRow> */}
+                  </StyledTableRowEven>
+
+                    )}
+                </React.Fragment>
+              ))}
+            </TableBody>
+          </Table>
+        </StyledTableContainer>
 
       {userId && (
         <div className="mt-5 d-flex justify-content-center">

@@ -12,15 +12,23 @@
   "dependencies": {
     "@emotion/react": "^11.11.4",
     "@emotion/styled": "^11.11.5",
+    "@jaredreisinger/react-crossword": "^5.2.0",
     "@mui/icons-material": "^5.15.16",
     "@mui/material": "^5.15.16",
     "@tensorflow/tfjs": "^4.17.0",
     "axios": "^1.6.8",
     "bootstrap": "^5.3.3",
+    "dotenv": "^16.4.5",
     "react": "^18.2.0",
+    "react-awesome-reveal": "^4.2.12",
     "react-bootstrap": "^2.10.2",
     "react-dom": "^18.2.0",
-    "react-router-dom": "^6.22.3"
+    "react-qr-code": "^2.0.15",
+    "react-router-dom": "^6.22.3",
+    "react-slick": "^0.30.2",
+    "recharts": "^2.12.7",
+    "slick-carousel": "^1.8.1",
+    "xlsx": "^0.18.5"
   },
   "devDependencies": {
     "@types/react": "^18.2.66",
