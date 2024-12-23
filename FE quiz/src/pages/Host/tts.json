@@ -1,0 +1,31 @@
+{
+    "across": {
+      "1": {
+        "clue": "bentuk bumi",
+        "answer": "BULAT",
+        "row": 0,
+        "col": 0
+      },
+      "4": {
+        "clue": "bentuk bumi",
+        "answer": "BULAT",
+        "row": 2,
+        "col": 3
+      }
+    },
+    "down": {
+      "2": {
+        "clue": "Tempat Kita Berpijak",
+        "answer": "TANAH",
+        "row": 0,
+        "col": 4
+      },
+      "3": {
+        "clue": "Lawan kata cepat",
+        "answer": "LAMBAT",
+        "row": 0,
+        "col": 2
+      }
+    }
+  }
+  

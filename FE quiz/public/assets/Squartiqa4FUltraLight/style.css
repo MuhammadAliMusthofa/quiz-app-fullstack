@@ -1,0 +1,9 @@
+@font-face {
+    font-family: 'Squartiqa 4F';
+    src: local('Squartiqa 4F Ultra Light'), local('Squartiqa-4F-Ultra-Light'),
+        url('Squartiqa4FUltraLight.woff2') format('woff2'),
+        url('Squartiqa4FUltraLight.woff') format('woff'),
+        url('Squartiqa4FUltraLight.ttf') format('truetype');
+    font-weight: 200;
+    font-style: normal;
+  }
