@@ -1,5 +1,5 @@
 
 
-const api = "http://localhost:4001/api";
+const api = "http://10.1.4.41/api/api";
 
 export default api
